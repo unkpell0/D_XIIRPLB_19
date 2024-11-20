@@ -1,0 +1,1 @@
+<img src="/img/logo.jpg" alt="Logo" width="27" class="d-inline-block align-text-top">
