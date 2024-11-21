@@ -57,4 +57,14 @@ class User extends Authenticatable
     public function rental(){
         return $this->belongsTo(Rental::class);
     }
+
+    public function isAdmin()
+    {
+        return $this->type === 'admin';
+    }
+
+    public function isUser()
+    {
+        return $this->type === 'user';
+    }
 }

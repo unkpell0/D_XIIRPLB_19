@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\RentalController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,19 +26,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('car', CarController::class);
+// Route::resource('car', CarController::class);
 
-Route::get('/user', [UserController::class, 'Index'])->name('user');
+// Route::get('/user', [UserController::class, 'Index'])->name('user');
 
+// Route login utama
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
+Route::post('login', [LoginController::class, 'login'])->name('login.post');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
+
+// Route logout
 
 
 
@@ -51,14 +57,29 @@ Route::post('register', [RegisterController::class, 'register']);
 
 //Users Routes
 
-Route::middleware(['user-access:user'])->group(function () {
-    Route::get('/user', [UserController::class, 'Index'])->name('user');
-    Route::post('/user/rent/{id}', [UserController::class, 'rental'])->name('user.rental');
-});
+// Subdomain untuk user
+Route::domain('user.localhost')->group(function () {
+    Route::middleware(['user-access:user'])->group(function () {
+        Route::get('/user', [UserController::class, 'Index'])->name('user');
+        Route::post('/user/rent/{id}', [UserController::class, 'rental'])->name('user.rental');
+        Route::get('/rental/order/{carId}', [RentalController::class, 'order'])->name('rental.order');
+        Route::post('/rental/store', [RentalController::class, 'store'])->name('rental.store');
+        // Route to show the payment form
+        Route::get('/rental/{rentalId}/payment', [TransactionController::class, 'showPaymentForm'])->name('user.payment.form');
+        // Route to process the payment and finalize the rental
+        Route::post('/rental/payment', [RentalController::class, 'processRental'])->name('user.payment.process');
+    });
 
+    // Tambahkan route user lainnya
+});
 
 // admin Routes
 
-Route::middleware(['auth.admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::domain('admin.localhost')->group(function () {
+    Route::middleware(['auth.admin'])->group(function () {
+        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    });
+
+    // Tambahkan route admin lainnya
 });
+

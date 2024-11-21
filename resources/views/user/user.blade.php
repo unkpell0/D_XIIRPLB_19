@@ -20,10 +20,7 @@
                             <p class="card-text"><small class="text-muted">{{ $car->status }}</small></p>
 
                             @if ($car->status === 'Tersedia')
-                                <form action="{{ route('user.rental', $car->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary">RENTAL SEGERA</button>
-                                </form>
+                                    <a href="{{ route('rental.order', ['carId' => $car->id]) }}"><button type="submit" class="btn btn-primary">RENTAL SEGERA</button></a>
                             @elseif ($car->status === 'Tidak Tersedia')
                                 <button class="btn btn-secondary" disabled>TIDAK TERSEDIA</button>
                             @else

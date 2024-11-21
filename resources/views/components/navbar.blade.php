@@ -15,6 +15,8 @@
                 @auth
                     @if (auth()->user()->type == 'user')
                         <li class="nav-item"><x-nav-link href="{{ route('user') }}" :active="request()->is('user')">Home</x-nav-link></li>
+                    @else
+                        <li class="nav-item"><x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->is('admin.dashboard')">Home</x-nav-link></li>
                     @endif
                 @endauth
 

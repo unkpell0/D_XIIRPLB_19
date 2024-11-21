@@ -11,7 +11,19 @@ class Rental extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status'];
+    protected $fillable = [
+        'car_id',
+        'name',
+        'phone',
+        'email',
+        'address',
+        'id_card',
+        'duration',
+        'return_date',
+        'payment_method',
+        'total_payment',
+        'status',
+    ];
 
     public function user()
     {
@@ -23,5 +35,11 @@ class Rental extends Model
         return $this->belongsToMany(Car::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     protected $primaryKey = 'id';
+
 }

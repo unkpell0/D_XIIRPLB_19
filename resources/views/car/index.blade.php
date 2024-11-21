@@ -15,14 +15,14 @@
             @foreach ($cars as $car)
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-sm">
-                        <img src="{{ asset('storage/cars/' . $car->image) }}" class="card-img-top img-fluid" alt="{{ $car->nama }}">
+                        <img src="{{ asset('storage/cars/' . $car->image) }}" class="card-img-center bg-contain rounded-md" alt="{{ $car->nama }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ $car->nama }}</h5>
                             <p class="card-text"><strong>Merek:</strong> {{ $car->merek }}</p>
                             <p class="card-text"><strong>Jenis:</strong> {{ $car->jenis }}</p>
                             <p class="card-text"><strong>Tipe:</strong> {{ $car->tipe }}</p>
                             <p class="card-text"><strong>Plat Nomor:</strong> {{ $car->plat_nomor }}</p>
-                            <p class="card-text"><strong>Status:</strong> 
+                            <p class="card-text"><strong>Status:</strong>
                                 <span class="badge bg-{{ $car->status == 'Tersedia' ? 'success' : ($car->status == 'Dirental' ? 'warning' : 'danger') }}">
                                     {{ $car->status }}
                                 </span>

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->year('tahun_produksi');
             $table->string('image');
             $table->string('status')->default('tersedia');
+            
             $table->timestamps();
         });
     }
