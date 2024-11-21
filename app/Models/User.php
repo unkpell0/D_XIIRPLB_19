@@ -47,9 +47,10 @@ class User extends Authenticatable
 
     protected $primaryKey = 'id';
 
-    protected function type(){
+    protected function type(): Attribute
+    {
         return new Attribute(
-            get: fn ($value) => ["user", "admin"][$value],
+            get: fn ($value) =>  ["user", "admin"][$value],
         );
     }
 

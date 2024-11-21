@@ -4,16 +4,27 @@
             @include('components.logo')
             AYORENT
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><x-nav-link href="{{ route('home') }}" :active="request()->is('home')">Home</x-nav-link>
-                </li>
-                <li class="nav-item"><x-nav-link href="{{ route('car.index') }}" :active="request()->is('car')">Cars</x-nav-link></li>
+                @auth
+                    @if (auth()->user()->type == 'user')
+                        <li class="nav-item"><x-nav-link href="{{ route('user') }}" :active="request()->is('user')">Home</x-nav-link></li>
+                    @endif
+                @endauth
+
+                <!-- Show "Cars" link only for admin -->
+                @auth
+                    @if (auth()->user()->type == 'admin')
+                        <li class="nav-item"><x-nav-link href="{{ route('car.index') }}" :active="request()->is('car')">Cars</x-nav-link>
+                        </li>
+                    @endif
+                @endauth
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -33,13 +44,14 @@
                     @endif
                 @else
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }}
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>

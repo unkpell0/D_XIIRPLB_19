@@ -15,10 +15,11 @@ class AdminMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        if (!Auth::guard('admin')->check()){
-            return redirect('admin/login');
-        }
-        return $next($request);
+{
+    if (!Auth::check() || auth()->user()->type !== 'admin') {
+        return redirect()->route('login')->withErrors('You must be an admin to access this page.');
     }
+    return $next($request);
+}
+
 }

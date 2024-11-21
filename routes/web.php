@@ -30,7 +30,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::resource('car', CarController::class);
 
-Route::get('user', [UserController::class, 'Index'])->name('user.index');
+Route::get('/user', [UserController::class, 'Index'])->name('user');
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
@@ -38,28 +38,27 @@ Route::post('login', [LoginController::class, 'login']);
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
-Route::resource('user', UserController::class);
 
-Route::middleware(['auth.web'])->group(function(){
-    Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+
+// Route::middleware(['auth.web'])->group(function(){
+//     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+//     Route::post('/user/rent/{id}', [UserController::class, 'rental'])->name('user.rental');
+// });
+
+// Route::middleware(['auth.admin'])->group(function () {
+//     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+// });
+
+//Users Routes
+
+Route::middleware(['user-access:user'])->group(function () {
+    Route::get('/user', [UserController::class, 'Index'])->name('user');
     Route::post('/user/rent/{id}', [UserController::class, 'rental'])->name('user.rental');
 });
+
+
+// admin Routes
 
 Route::middleware(['auth.admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
-
-
-// Users Routes
-
-// Route::middleware(['auth', 'user-access:user'])->group(function () {
-  
-//     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-// });
-
-// // admin Routes
-
-// Route::middleware(['auth', 'user-access:admin'])->group(function () {
-  
-//     Route::get('/admin/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
-// });  
