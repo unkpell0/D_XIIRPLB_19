@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Rental;
 
 class Car extends Model
 {
@@ -29,4 +30,9 @@ class Car extends Model
     // public $incrementing = false; // Jika bukan tipe integer auto-increment
 
     // protected $keyType = 'string'; // Jika menggunakan string
+
+    public function rental()
+    {
+        return $this->belongsToMany(Rental::class);
+    } 
 }

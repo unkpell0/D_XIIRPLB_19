@@ -15,12 +15,12 @@ class Rental extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 
     public function car()
     {
-        return $this->belongsTo(Car::class);
+        return $this->belongsToMany(Car::class);
     }
 
     protected $primaryKey = 'id';

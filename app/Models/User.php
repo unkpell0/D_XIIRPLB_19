@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\Rental;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,9 @@ class User extends Authenticatable
         return new Attribute(
             get: fn ($value) => ["user", "admin"][$value],
         );
+    }
+
+    public function rental(){
+        return $this->belongsTo(Rental::class);
     }
 }
