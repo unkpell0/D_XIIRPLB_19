@@ -23,7 +23,7 @@
                             <p class="card-text"><strong>Tipe:</strong> {{ $car->tipe }}</p>
                             <p class="card-text"><strong>Plat Nomor:</strong> {{ $car->plat_nomor }}</p>
                             <p class="card-text"><strong>Status:</strong>
-                                <span class="badge bg-{{ $car->status == 'Tersedia' ? 'success' : ($car->status == 'Dirental' ? 'warning' : 'danger') }}">
+                                <span class="badge bg-{{ $car->status == 'tersedia' ? 'success' : ($car->status == 'maintenance' ? 'warning' : 'danger') }}">
                                     {{ $car->status }}
                                 </span>
                             </p>

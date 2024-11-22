@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('rentals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('car_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('car_id')->constrained('cars')->onDelete('cascade');
             $table->string('name');
             $table->string('phone');
             $table->string('email');
@@ -24,9 +24,11 @@ return new class extends Migration {
             $table->string('payment_method');
             $table->decimal('total_payment', 10, 2);
             $table->string('status')->default('Pending');
+            // $table->unsignedBigInteger('rental_id')->nullable()->after('password');
+            // $table->foreign('rental_id')->references('id')->on('rentals')->onDelete('cascade');
             $table->timestamps();
-
         });
+
     }
 
     /**

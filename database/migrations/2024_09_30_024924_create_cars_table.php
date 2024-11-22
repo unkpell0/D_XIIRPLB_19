@@ -6,29 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('cars', function (Blueprint $table) {
-            $table->id(); // Ini secara otomatis auto increment dan primary key
+            $table->id();
             $table->string('nama');
             $table->string('jenis');
             $table->string('merek');
             $table->string('tipe');
-            $table->char('plat_nomor', length:10);
+            $table->char('plat_nomor', 10)->unique();
             $table->year('tahun_produksi');
             $table->string('image');
-            $table->string('status')->default('tersedia');
-            
+            $table->enum('status', ['tersedia', 'disewa', 'maintenance'])->default('tersedia');
+            $table->decimal('rental_price', 10, 2)->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('cars');

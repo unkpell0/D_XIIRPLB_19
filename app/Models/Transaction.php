@@ -17,6 +17,20 @@ class Transaction extends Model
         'status'
     ];
 
+    // Add constant for valid statuses
+    const VALID_STATUSES = ['Pending', 'Dirental', 'Dibatalkan', 'Tersedia', 'Tidak Tersedia'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($transaction) {
+            if (!in_array($transaction->status, self::VALID_STATUSES)) {
+                throw new \InvalidArgumentException('Invalid status value');
+            }
+        });
+    }
+
     /**
      * Get the user that owns the transaction.
      */

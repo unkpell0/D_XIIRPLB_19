@@ -10,11 +10,11 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Link to users table
-            $table->foreignId('rental_id')->constrained()->onDelete('cascade'); // Link to rentals table
-            $table->enum('payment_method', ['bank_transfer', 'cash']); // Payment method (or you can add more options)
-            $table->decimal('total_payment', 10, 2); // Total payment amount
-            $table->enum('status', ['Pending', 'Completed', 'Failed'])->default('Pending'); // Transaction status
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('rental_id')->constrained()->onDelete('cascade');
+            $table->string('payment_method');
+            $table->decimal('total_payment', 10, 2);
+            $table->enum('status', ['Pending', 'Dirental', 'Dibatalkan', 'Tersedia', 'Tidak Tersedia']); // Define possible status values
             $table->timestamps();
         });
     }

@@ -2,169 +2,138 @@
 
 @section('title', 'AYORENT | TAMBAH DATA')
 @section('content')
-    <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card border-0 shadow rounded">
-                    <div class="card-body">
-                        <form action="{{ route('car.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
+    <div class="container mx-auto mb-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white shadow-lg rounded-lg">
+                <div class="p-8">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">Tambah Data Mobil</h2>
+                    <form action="{{ route('car.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        @csrf
 
-                            <div class="mb-3">
-                                <label for="formFile" class="form-label">GAMBAR</label>
-                                <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                    name="image">
+                        <div>
+                            <label for="image" class="block text-sm font-medium text-gray-700">Gambar</label>
+                            <input type="file" id="image" name="image"
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('image')  @enderror">
+                            @error('image')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                                {{-- error message untuk title --}}
-                                @error('image')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                        <div>
+                            <label for="nama" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
+                            <input type="text" id="nama" name="nama" value="{{ old('nama') }}"
+                                placeholder="Masukkan Nama Mobil"
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('nama') @enderror">
+                            @error('nama')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                            {{-- <div class="form-group">
-                                    <label class="font-weight-bold">GAMBAR</label>
-                                    <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                        name="image">
-                                </div> --}}
-
-                            <div class="form-group mt-3">
-                                <label class="font-weight-bold">NAMA MOBIL</label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                    name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama Mobil">
-                                <!-- error message untuk title -->
-                                @error('nama')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group mt-3">
-                                <label class="font-weight-bold">JENIS MOBIL</label>
-
-                                {{-- <input type="text" class="form-control @error('jenis') is-invalid @enderror"
-                                        name="jenis" value="{{ old('jenis') }}" placeholder="Masukkan jenis Mobil"> --}}
-
-                                <select class="form-select @error('jenis') is-invalid @enderror" name="jenis"
-                                     aria-label="Default select example">
-                                    <option selected></option>
-                                    <option value="LCGC" onclick="setStatus('LCGC')">LCGC</option>
-                                    <option value="MPV" onclick="setStatus('MPV')">MPV</option>
-                                    <option value="SUV" onclick="setStatus('SUV')">SUV</option>
-                                    <option value="LMPV" onclick="setStatus('LMPV')">LMPV</option>
+                        <div class="flex flex-row w-full space-x-4">
+                            <div class="w-full">
+                                <label for="jenis" class="block text-sm font-medium text-gray-700">Jenis Mobil</label>
+                                <select id="jenis" name="jenis"
+                                    class="mt-2 h-9 block w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('jenis') placeholder:ml-2 @enderror">
+                                    <option value="" selected disabled>Pilih Jenis Mobil</option>
+                                    <option value="LCGC">LCGC</option>
+                                    <option value="MPV">MPV</option>
+                                    <option value="SUV">SUV</option>
+                                    <option value="LMPV">LMPV</option>
                                 </select>
-                                
-                                <!-- error message untuk title -->
                                 @error('jenis')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-group mt-3">
-                                <label class="font-weight-bold">MEREK MOBIL</label>
-
-                                <select class="form-select @error('merek') is-invalid @enderror" name="merek"
-                                     aria-label="Default select example">
-                                    <option selected></option>
-                                    <option value="Toyota" onclick="setStatus('Toyota')">Toyota</option>
-                                    <option value="Daihatsu" onclick="setStatus('Daihatsu')">Daihatsu</option>
-                                    <option value="Honda" onclick="setStatus('Honda')">Honda</option>
-                                    <option value="Mitsubishi" onclick="setStatus('Mitsubishi')">Mitsubishi</option>
-                                    <option value="Hyundai" onclick="setStatus('Hyundai')">Hyundai</option>
-                                    <option value="Suzuki" onclick="setStatus('Suzuki')">Suzuki</option>
+                            <div class="w-full">
+                                <label for="merek" class="block text-sm font-medium text-gray-700">Merek Mobil</label>
+                                <select id="merek" name="merek"
+                                    class="mt-2 h-9 block w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('merek') placeholder:ml-2 @enderror">
+                                    <option value="" selected disabled>Pilih Merek Mobil</option>
+                                    <option value="Toyota">Toyota</option>
+                                    <option value="Daihatsu">Daihatsu</option>
+                                    <option value="Honda">Honda</option>
+                                    <option value="Mitsubishi">Mitsubishi</option>
+                                    <option value="Hyundai">Hyundai</option>
+                                    <option value="Suzuki">Suzuki</option>
                                 </select>
-
-                                <!-- error message untuk title -->
                                 @error('merek')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="flex flex-row w-full space-x-4">
+                            <div class="w-full">
+                                <label for="tipe" class="block text-sm font-medium text-gray-700">Tipe Mobil</label>
+                                <input type="text" id="tipe" name="tipe" value="{{ old('tipe') }}"
+                                    placeholder="Masukkan Tipe Mobil"
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('tipe') placeholder:ml-2 @enderror">
+                                @error('tipe')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-group mt-3">
-                                <label class="font-weight-bold">TIPE MOBIL</label>
-                                <input type="text" class="form-control @error('tipe') is-invalid @enderror"
-                                    name="tipe" value="{{ old('tipe') }}" placeholder="Masukkan tipe Mobil">
-                                <!-- error message untuk title -->
+                            <div class="w-full">
+                                <label for="plat_nomor" class="block text-sm font-medium text-gray-700">Plat Nomor
+                                    Mobil</label>
+                                <input type="text" id="plat_nomor" name="plat_nomor" value="{{ old('plat_nomor') }}"
+                                    placeholder="Masukkan Plat Nomor Mobil"
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('plat_nomor') placeholder:ml-2 @enderror">
                                 @error('plat_nomor')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
 
-                            <div class="form-group mt-3">
-                                <label class="font-weight-bold">PLAT NOMOR MOBIL</label>
-                                <input type="text" class="form-control @error('plat_nomor') is-invalid @enderror"
-                                    name="plat_nomor" value="{{ old('plat_nomor') }}"
-                                    placeholder="Masukkan Plat Nomor Mobil">
-                                <!-- error message untuk title -->
-                                @error('plat_nomor')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group mt-3">
-                                <label class="font-weight-bold">TAHUN PRODUKSI MOBIL</label>
-                                <input type="text" class="form-control @error('tahun_produksi') is-invalid @enderror"
-                                    name="tahun_produksi" value="{{ old('tahun_produksi') }}"
-                                    placeholder="Masukkan Tahun Produksi Mobil">
-                                <!-- error message untuk title -->
+                        <div class="flex flex-row w-full space-x-4">
+                            <div class="w-full">
+                                <label for="tahun_produksi" class="block text-sm font-medium text-gray-700">Tahun Produksi
+                                    Mobil</label>
+                                <input type="text" id="tahun_produksi" name="tahun_produksi"
+                                    value="{{ old('tahun_produksi') }}" placeholder="Masukkan Tahun Produksi"
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('tahun_produksi') placeholder:ml-2 @enderror">
                                 @error('tahun_produksi')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-group mt-3 mb-3">
-                                <label class="font-weight-bold">STATUS</label>
-                                <div class="dropdown mt-2">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false" id="statusButton">
-                                        PILIH STATUS
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" onclick="setStatus('Tersedia')">Tersedia</a></li>
-                                        <li><a class="dropdown-item" onclick="setStatus('TidakTersedia')">Tidak
-                                                Tersedia</a></li>
-                                    </ul>
-                                </div>
-                                <input type="hidden" id="statusInput" name="status">
-
-                                @if ($errors->has('status'))
-                                    <div class="alert alert-danger">
-                                        {{ $errors->first('status') }}
-                                    </div>
-                                @endif
-
+                            <!-- Kolom baru untuk harga sewa -->
+                            <div class="w-full">
+                                <label for="rental_price" class="block text-sm font-medium text-gray-700">Harga Sewa (per
+                                    hari)</label>
+                                <input type="number" id="rental_price" name="rental_price"
+                                    value="{{ old('rental_price') }}" placeholder="Masukkan Harga Sewa per Hari"
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('rental_price') @enderror">
+                                @error('rental_price')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
+                        </div>
 
-                            <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
-                            <button type="reset" class="btn btn-md btn-warning">RESET</button>
-                        </form>
-                    </div>
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                            <select id="status" name="status"
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('status') placeholder:ml-2 @enderror">
+                                <option value="" selected disabled>Pilih Status</option>
+                                <option value="tersedia">Tersedia</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="disewa">Disewa</option>
+                            </select>
+                            @error('status')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="flex justify-between">
+                            <button type="submit"
+                                class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600">Simpan</button>
+                            <button type="reset"
+                                class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-yellow-600">Reset</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-@push('scripts')
-    <script>
-        function setStatus(status) {
-            document.getElementById('statusInput').value = status;
-
-            document.getElementById('statusButton').textContent = status;
-        }
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    {{-- <script src="https://cdn.ckeditor.com/4.25.0-lts/standard/ckeditor.js"></script> --}}
-@endpush

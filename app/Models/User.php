@@ -55,7 +55,7 @@ class User extends Authenticatable
     }
 
     public function rental(){
-        return $this->belongsTo(Rental::class);
+        return $this->hasMany(Rental::class);
     }
 
     public function isAdmin()

@@ -4,9 +4,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div> 
+                <div class="card-header">{{ __('Dashboard') }}</div>
                 <div class="card-body">
-                    You are login as a manager role.
+                    <h1>Hi, <span class="text-pink-400 text-5xl">{{ Auth::user()->name }}</span></h1>
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@
         <div class="row">
             <!-- Form Rental -->
             <div class="col-md-8">
-                <form id="rentalForm" action="{{ route('user.payment.process') }}" method="POST" enctype="multipart/form-data">
+                <form id="rentalForm" action="{{ route('rental.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <input type="hidden" name="car_id" value="{{ $car->id }}">
@@ -150,104 +150,98 @@
     </div>
 
     @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('rentalForm');
-            const additionalFields = document.getElementById('additionalFields');
-            const inputs = form.querySelectorAll('input, textarea, select');
-            const totalPaymentField = document.getElementById('total_payment');
-            const durationField = document.getElementById('duration');
-            const returnDateField = document.getElementById('return_date');
-            const basePrice = parseInt(document.getElementById('base_price').value);
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('rentalForm');
+                const additionalFields = document.getElementById('additionalFields');
+                const inputs = form.querySelectorAll('input, textarea, select');
+                const totalPaymentField = document.getElementById('total_payment');
+                const durationField = document.getElementById('duration');
+                const returnDateField = document.getElementById('return_date');
+                const basePrice = parseInt(document.getElementById('base_price').value) || 0;
 
-            // Fungsi untuk menyimpan data ke sessionStorage (akan hilang saat logout/tutup browser)
-            function saveFormData() {
-                inputs.forEach(input => {
-                    if (input.name) {
-                        sessionStorage.setItem(input.name, input.value);
+                // Update the return date based on the selected duration
+                function updateFields() {
+                    const duration = parseInt(durationField.value || 1); // Default to 1 day if no value is selected
+                    totalPaymentField.value = `Rp${(basePrice * duration).toLocaleString('id-ID')}`;
+
+                    const currentDate = new Date();
+                    currentDate.setDate(currentDate.getDate() +
+                    duration); // Add the rental duration to the current date
+
+                    const year = currentDate.getFullYear();
+                    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed, so add 1
+                    const day = String(currentDate.getDate()).padStart(2, '0');
+                    const hours = '08'; // Set default time to 08:00
+                    const minutes = '00';
+
+                    const formattedReturnDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+                    returnDateField.value = formattedReturnDate; // Set the calculated return date in the input field
+                }
+
+                // Call updateFields on page load to set the default return date
+                updateFields();
+
+                // Update the return date when the duration is changed
+                durationField.addEventListener('change', updateFields);
+
+                // Optional: Store form data to sessionStorage (in case the user navigates away)
+                function saveFormData() {
+                    inputs.forEach(input => {
+                        if (input.name) {
+                            sessionStorage.setItem(input.name, input.value);
+                        }
+                    });
+                }
+
+                // Function to load form data from sessionStorage
+                function loadFormData() {
+                    inputs.forEach(input => {
+                        if (input.name) {
+                            const savedValue = sessionStorage.getItem(input.name);
+                            if (savedValue) {
+                                input.value = savedValue;
+                            }
+                        }
+                    });
+
+                    if (validateInitialFields()) {
+                        additionalFields.style.display = 'block'; // Show additional fields if valid
                     }
-                });
-            }
+                }
 
-            // Fungsi untuk memuat data dari sessionStorage
-            function loadFormData() {
-                inputs.forEach(input => {
-                    if (input.name) {
-                        const savedValue = sessionStorage.getItem(input.name);
-                        if (savedValue) {
-                            input.value = savedValue;
+                // Validate required fields
+                function validateInitialFields() {
+                    for (let i = 0; i < inputs.length; i++) {
+                        const input = inputs[i];
+                        if (input.closest('#additionalFields')) continue;
+                        if (!input.value) {
+                            return false;
                         }
                     }
+                    return true;
+                }
+
+                // Save data on input changes
+                inputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        saveFormData();
+                        if (validateInitialFields()) {
+                            additionalFields.style.display = 'block';
+                        } else {
+                            additionalFields.style.display = 'none';
+                        }
+                    });
                 });
 
-                // Validasi dan tampilkan field tambahan jika data tersimpan
-                if (validateInitialFields()) {
-                    additionalFields.style.display = 'block';
-                }
-            }
-
-            // Validasi semua field utama
-            function validateInitialFields() {
-                for (let i = 0; i < inputs.length; i++) {
-                    const input = inputs[i];
-                    // Lewati input yang ada di additional fields
-                    if (input.closest('#additionalFields')) continue;
-
-                    // Periksa apakah input memiliki value
-                    if (!input.value) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            // Tambahkan event listener untuk menyimpan data saat input berubah
-            inputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    saveFormData();
-
-                    // Tampilkan field tambahan jika semua field utama valid
-                    if (validateInitialFields()) {
-                        additionalFields.style.display = 'block';
-                    } else {
-                        additionalFields.style.display = 'none';
-                    }
+                // Clear session data when the form is submitted
+                form.addEventListener('submit', function() {
+                    sessionStorage.clear();
                 });
+
+                // Load form data when the page loads
+                loadFormData();
             });
-
-            // Tambahkan event listener untuk menghapus data saat form di-submit
-            form.addEventListener('submit', function() {
-                sessionStorage.clear(); // Hapus data dari sessionStorage
-            });
-
-            // Muat data yang tersimpan saat halaman dimuat
-            loadFormData();
-
-            // Hitung total pembayaran berdasarkan durasi
-            durationField.addEventListener('change', function() {
-                const duration = parseInt(durationField.value);
-                totalPaymentField.value = `Rp${(basePrice * duration).toLocaleString('id-ID')}`;
-
-                // Menghitung tanggal pengembalian otomatis
-                const currentDate = new Date(); // Mendapatkan tanggal saat ini
-                currentDate.setDate(currentDate.getDate() + duration); // Menambahkan durasi sewa ke tanggal saat ini
-
-                // Menyusun tanggal dengan jam dan menit yang sesuai
-                const year = currentDate.getFullYear();
-                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                const day = String(currentDate.getDate()).padStart(2, '0');
-                const hours = String(currentDate.getHours()).padStart(2, '0');
-                const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-
-                // Format tanggal dan waktu menjadi YYYY-MM-DDTHH:MM
-                const formattedReturnDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-
-                returnDateField.value = formattedReturnDate; // Menampilkan tanggal pengembalian di input
-
-                // Simpan data setelah perubahan
-                saveFormData();
-            });
-        });
         </script>
     @endpush
 @endsection

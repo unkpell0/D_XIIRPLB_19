@@ -27,12 +27,12 @@ class Rental extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function car()
     {
-        return $this->belongsToMany(Car::class);
+        return $this->belongsTo(Car::class);
     }
 
     public function transactions()
