@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->dateTime('return_date');
             $table->string('payment_method');
             $table->decimal('total_payment', 10, 2);
-            $table->string('status')->default('Pending');
+            $table->string('status')->default('tersedia');
             // $table->unsignedBigInteger('rental_id')->nullable()->after('password');
             // $table->foreign('rental_id')->references('id')->on('rentals')->onDelete('cascade');
             $table->timestamps();

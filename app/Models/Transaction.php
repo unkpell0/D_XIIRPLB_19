@@ -18,7 +18,7 @@ class Transaction extends Model
     ];
 
     // Add constant for valid statuses
-    const VALID_STATUSES = ['Pending', 'Dirental', 'Dibatalkan', 'Tersedia', 'Tidak Tersedia'];
+    const VALID_STATUSES = ['tersedia', 'disewa', 'maintenance'];
 
     protected static function boot()
     {

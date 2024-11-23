@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Struk Pembayaran</title>
     <style>
@@ -7,31 +8,38 @@
             font-family: Arial, sans-serif;
             padding: 20px;
         }
+
         .header {
             text-align: center;
             margin-bottom: 30px;
         }
+
         .content {
             margin-bottom: 20px;
         }
+
         .table {
             width: 100%;
             border-collapse: collapse;
         }
-        .table th, .table td {
+
+        .table th,
+        .table td {
             padding: 8px;
             border: 1px solid #ddd;
         }
+
         .footer {
             margin-top: 50px;
             text-align: center;
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h2>STRUK PEMBAYARAN RENTAL MOBIL</h2>
-        <p>{{ date('d/m/Y H:i:s') }}</p>
+        {{-- <p>{{ date('d/m/Y H:i:s') }}</p> --}}
     </div>
 
     <div class="content">
@@ -57,6 +65,14 @@
                 <td>{{ $transaction->payment_method === 'bank_transfer' ? 'Transfer Bank' : 'Tunai' }}</td>
             </tr>
             <tr>
+                <td><strong>Tanggal Rental:</strong></td>
+                <td>{{ \Carbon\Carbon::parse($rental->rental_date)->format('d/m/Y') ?? 'N/A' }}</td>
+            </tr>
+            <tr>
+                <td><strong>Tanggal Pengembalian:</strong></td>
+                <td>{{ \Carbon\Carbon::parse($rental->return_date)->format('d/m/Y') ?? 'N/A' }}</td>
+            </tr>
+            <tr>
                 <td><strong>Total Pembayaran:</strong></td>
                 <td>Rp{{ number_format($transaction->total_payment ?? 0, 0, ',', '.') }}</td>
             </tr>
@@ -67,4 +83,5 @@
         <p>Terima kasih telah menggunakan layanan kami!</p>
     </div>
 </body>
+
 </html>

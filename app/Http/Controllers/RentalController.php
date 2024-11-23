@@ -19,14 +19,14 @@ class RentalController extends Controller
      */
     public function order($carId)
     {
-        try {
+        // try {
             $car = Car::available()->findOrFail($carId);
             return view('rental.order', compact('car'));
-        } catch (Exception $e) {
-            return redirect()
-                ->route('home')
-                ->with('error', 'Mobil tidak tersedia atau sudah disewa.');
-        }
+        // } catch (Exception $e) {
+        //     return redirect()
+        //         ->route('home')
+        //         ->with('error', 'Mobil tidak tersedia atau sudah disewa.');
+        // }
     }
 
     /**
@@ -87,14 +87,14 @@ class RentalController extends Controller
 
         // } catch (Exception $e) {
             // Hapus file ID card jika upload sudah dilakukan tapi terjadi error
-            if (isset($idCardPath)) {
-                Storage::disk('public')->delete($idCardPath);
-            }
+            // if (isset($idCardPath)) {
+            //     Storage::disk('public')->delete($idCardPath);
+            // }
 
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            // return redirect()
+            //     ->back()
+            //     ->withInput()
+            //     ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         // }
     }
 

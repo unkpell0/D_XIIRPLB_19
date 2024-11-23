@@ -14,7 +14,7 @@ class CreateTransactionsTable extends Migration
             $table->foreignId('rental_id')->constrained()->onDelete('cascade');
             $table->string('payment_method');
             $table->decimal('total_payment', 10, 2);
-            $table->enum('status', ['Pending', 'Dirental', 'Dibatalkan', 'Tersedia', 'Tidak Tersedia']); // Define possible status values
+            $table->enum('status', ['tersedia', 'disewa', 'maintenance']); // Define possible status values
             $table->timestamps();
         });
     }

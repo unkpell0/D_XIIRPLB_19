@@ -85,11 +85,11 @@
             transition: 0.4s;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: #4CAF50;
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(20px);
         }
 
