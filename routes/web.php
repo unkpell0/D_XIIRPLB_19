@@ -73,13 +73,12 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
 
     // Rental Management
     Route::prefix('rental')->name('rental.')->group(function () {
-        // Order Routes
+        // Rental Order Routes
         Route::get('/order/{carId}', [RentalController::class, 'order'])->name('order');
         Route::post('/store', [RentalController::class, 'store'])->name('store');
         Route::get('/success/{rentalId}', [TransactionController::class, 'rentalSuccess'])->name('success');
 
-
-        // Payment Routes
+        // Payment Management Routes
         Route::prefix('payment')->name('payment.')->group(function () {
             Route::get('/{rentalId}', [TransactionController::class, 'showPaymentForm'])->name('form');
             Route::post('/{rentalId}', [TransactionController::class, 'processPayment'])->name('process');
@@ -88,11 +87,12 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
 });
 
 
+
 // admin Routes
 
 // Route::domain('admin.localhost')->group(function () {
-    Route::middleware(['auth', 'auth.admin'])->group(function () {
-        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    });
+Route::middleware(['auth', 'auth.admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+});
 // });
 

@@ -4,105 +4,113 @@ namespace App\Http\Controllers;
 
 use App\Models\Rental;
 use App\Models\Transaction;
+use App\Models\Car;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-
 class TransactionController extends Controller
 {
-    /**
-     * Show payment form for a specific rental.
-     *
-     * @param int $rentalId
-     * @return \Illuminate\View\View
-     */
     public function showPaymentForm($rentalId)
     {
-        // Fetch rental details
-        $rental = Rental::with('user', 'car')->findOrFail($rentalId);
+        try {
+            $rental = Rental::with(['user', 'car'])
+                           ->where('status', Transaction::VALID_STATUSES[0]) // 'Pending'
+                           ->findOrFail($rentalId);
 
-        // Return payment view
-        return view('rental.payment', compact('rental'));
+            return view('rental.payment', compact('rental'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Rental tidak ditemukan atau sudah tidak valid.');
+        }
     }
 
-    /**
-     * Process the payment and update rental status.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $rentalId
-     * @return \Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
     public function processPayment(Request $request, $rentalId)
     {
-        // Validate input
         $request->validate([
-            'payment_method' => 'required|string',
-            'total_payment' => 'required|numeric',
+            'payment_method' => 'required|in:cash,bank_transfer',
+            'total_payment' => 'required|numeric|min:0',
         ]);
 
-        // Find rental
-        $rental = Rental::findOrFail($rentalId);
+        try {
+            $rental = Rental::where('status', Transaction::VALID_STATUSES[0]) // 'Pending'
+                          ->findOrFail($rentalId);
 
-        // Save transaction
-        $transaction = Transaction::create([
-            'user_id' => Auth::id(),
-            'rental_id' => $rental->id,
-            'payment_method' => $request->payment_method,
-            'total_payment' => $request->total_payment,
-            'status' => 'Dirental',
-        ]);
+            // Create transaction
+            $transaction = new Transaction();
+            $transaction->user_id = Auth::id();
+            $transaction->rental_id = $rental->id;
+            $transaction->payment_method = $request->payment_method;
+            $transaction->total_payment = $request->total_payment;
+            $transaction->status = Transaction::VALID_STATUSES[1]; // 'Dirental'
 
-        // Update rental and car status
-        $rental->update(['status' => 'Dirental']);
-        $rental->car->update(['is_available' => false]); // Pastikan ada field `is_available` di tabel `cars`.
+            if (!$transaction->save()) {
+                throw new \Exception('Gagal menyimpan transaksi');
+            }
 
-        // Generate and return receipt if requested
-        if ($request->has('print_receipt')) {
-            $pdf = $this->generateReceiptPDF($transaction->id);
+            // Update rental status
+            $rental->status = Transaction::VALID_STATUSES[1]; // 'Dirental'
+            if (!$rental->save()) {
+                // Rollback: delete transaction jika gagal update rental
+                $transaction->delete();
+                throw new \Exception('Gagal mengupdate status rental');
+            }
 
-            // Simpan PDF sebagai file sementara untuk diunduh
-            $filename = 'receipt_' . $transaction->id . '.pdf';
-            $path = storage_path('app/temp/' . $filename);
-            $pdf->save($path);
+            // Update car status
+            $car = Car::findOrFail($rental->car_id);
+            $car->status = Car::STATUS_DISEWA;
+            if (!$car->save()) {
+                // Rollback: delete transaction dan kembalikan status rental
+                $transaction->delete();
+                $rental->status = Transaction::VALID_STATUSES[0];
+                $rental->save();
+                throw new \Exception('Gagal mengupdate status mobil');
+            }
 
-            // Kirim file PDF sebagai unduhan
-            return response()->download($path, $filename)->deleteFileAfterSend(true);
+            // Handle PDF generation if requested
+            if ($request->has('print_receipt')) {
+                $pdf = $this->generateReceiptPDF($transaction->id);
+                $filename = 'receipt_' . $transaction->id . '.pdf';
+                $path = storage_path('app/temp/' . $filename);
+                $pdf->save($path);
+
+                return response()
+                    ->download($path, $filename)
+                    ->deleteFileAfterSend(true);
+            }
+
+            return redirect()
+                ->route('rental.success', ['rentalId' => $rental->id])
+                ->with('success', 'Pembayaran berhasil. Rental dikonfirmasi!');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Terjadi kesalahan saat memproses pembayaran: ' . $e->getMessage());
         }
-
-        // Redirect to home with success message
-        return redirect()->route('user')->with('success', 'Payment successful. Rental confirmed!');
     }
 
-
-
-    /**
-     * Generate the payment receipt as a PDF.
-     *
-     * @param int $transactionId
-     * @return \Barryvdh\DomPDF\PDF
-     */
     private function generateReceiptPDF($transactionId)
     {
-        $transaction = Transaction::findOrFail($transactionId);
-        $rental = Rental::with(['user', 'car'])->findOrFail($transaction->rental_id);
+        $transaction = Transaction::with(['rental.car'])
+                                ->findOrFail($transactionId);
 
-        return Pdf::loadView('rental.receipt-pdf', [
-            'rental' => $rental,
-            'transaction' => $transaction
-        ]);
+        return Pdf::loadView('rental.receipt-pdf', compact('transaction'));
     }
 
-    /**
-     * Show the rental success page.
-     *
-     * @param int $rentalId
-     * @return \Illuminate\View\View
-     */
     public function rentalSuccess($rentalId)
     {
-        $rental = Rental::findOrFail($rentalId);
+        try {
+            $rental = Rental::with(['car'])
+                           ->where('status', Transaction::VALID_STATUSES[1]) // 'Dirental'
+                           ->findOrFail($rentalId);
 
-        return view('rental.success', compact('rental'));
+            return view('rental.success', compact('rental'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Rental tidak ditemukan.');
+        }
     }
 }

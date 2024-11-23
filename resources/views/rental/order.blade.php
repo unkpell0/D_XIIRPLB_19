@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="id_card" class="col-md-4 col-form-label">Upload KTP/SIM</label>
+                        <label for="id_card" class="col-md-4 col-form-label">Upload KTP</label>
                         <div class="col-md-8">
                             <input type="file" name="id_card" id="id_card"
                                 class="form-control-file @error('id_card') is-invalid @enderror"
@@ -76,7 +76,11 @@
                             <select name="duration" id="duration"
                                 class="form-control @error('duration') is-invalid @enderror" required>
                                 <option value="1" {{ old('duration') == 1 ? 'selected' : '' }}>1 Hari</option>
+                                <option value="2" {{ old('duration') == 2 ? 'selected' : '' }}>2 Hari</option>
                                 <option value="3" {{ old('duration') == 3 ? 'selected' : '' }}>3 Hari</option>
+                                <option value="4" {{ old('duration') == 4 ? 'selected' : '' }}>4 Hari</option>
+                                <option value="5" {{ old('duration') == 5 ? 'selected' : '' }}>5 Hari</option>
+                                <option value="6" {{ old('duration') == 6 ? 'selected' : '' }}>6 Hari</option>
                                 <option value="7" {{ old('duration') == 7 ? 'selected' : '' }}>1 Minggu</option>
                             </select>
                             @error('duration')
@@ -170,13 +174,13 @@
                     duration); // Add the rental duration to the current date
 
                     const year = currentDate.getFullYear();
-                    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed, so add 1
+                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
                     const day = String(currentDate.getDate()).padStart(2, '0');
-                    const hours = '08'; // Set default time to 08:00
-                    const minutes = '00';
+                    const hours = String(new Date().getHours()).padStart(2, '0'); // Mengambil jam saat ini
+                    const minutes = String(new Date().getMinutes()).padStart(2, '0'); // Mengambil menit saat ini
 
                     const formattedReturnDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-                    returnDateField.value = formattedReturnDate; // Set the calculated return date in the input field
+                    returnDateField.value = formattedReturnDate;
                 }
 
                 // Call updateFields on page load to set the default return date

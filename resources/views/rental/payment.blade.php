@@ -60,15 +60,11 @@
                     form.submit();
                 } else {
                     // Jika user memilih Cancel, submit form tanpa parameter print
-                    document.getElementById('paymentForm').submit();
+                    // document.getElementById('paymentForm').submit();
                 }
             }
 
-            window.onload = function() {
-                setTimeout(function() {
-                    window.location.href = "{{ route('rental.success', ['rentalId' => $rental->id]) }}";
-                }, 3000); // Tunggu 3 detik sebelum diarahkan
-            }; 
+
         </script>
     @endpush
 @endsection

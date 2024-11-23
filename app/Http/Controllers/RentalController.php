@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Exception;
 use App\Models\Car;
 use App\Models\Rental;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RentalController extends Controller
 {
@@ -12,15 +15,19 @@ class RentalController extends Controller
      * Show the order form for a car.
      *
      * @param int $carId
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function order($carId)
     {
-        $car = Car::where('id', $carId)->where('status', Car::STATUS_TERSEDIA)->firstOrFail();
-
-        return view('rental.order', compact('car'));
+        try {
+            $car = Car::available()->findOrFail($carId);
+            return view('rental.order', compact('car'));
+        } catch (Exception $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Mobil tidak tersedia atau sudah disewa.');
+        }
     }
-
 
     /**
      * Store a new rental order.
@@ -30,66 +37,75 @@ class RentalController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate input data
-        $request->validate([
+        $validated = $request->validate([
+            'car_id' => 'required|exists:cars,id',
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:15',
             'email' => 'required|email|max:255',
-            'address' => 'required|string|max:255',
-            'id_card' => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'duration' => 'required|integer|min:1',
-            'payment_method' => 'required|string',
+            'address' => 'required|string|max:1000',
+            'id_card' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'duration' => 'required|integer|min:1|max:30',
+            'return_date' => 'required|date|after:today',
+            'payment_method' => 'required|in:cash,bank_transfer',
         ]);
 
-        // Fetch the selected car
-        $car = Car::findOrFail($request->car_id);
+        // try {
+            $car = Car::findOrFail($request->car_id);
+            if (!$car->isAvailable()) {
+                throw new Exception('Mobil sudah tidak tersedia.');
+            }
 
-        // Calculate total payment
-        $totalPayment = $this->calculateTotalPayment($request->duration, $car);
+            // Calculate total payment
+            $totalPayment = $this->calculateTotalPayment($request->duration, $car);
 
-        // Calculate the return date
-        $returnDate = now()->addDays($request->duration);
+            // Handle ID card upload
+            $idCardPath = $request->file('id_card')->store('id_cards', 'public');
 
-        // Create new rental
-        $rental = new Rental();
-        $rental->user_id = auth()->id();
-        $rental->car_id = $car->id;
-        $rental->name = $request->name;
-        $rental->phone = $request->phone;
-        $rental->email = $request->email;
-        $rental->address = $request->address;
-        $rental->duration = $request->duration;
-        $rental->return_date = $returnDate;
-        $rental->payment_method = $request->payment_method;
-        $rental->total_payment = $totalPayment;
+            // Create new rental
+            $rental = new Rental();
+            $rental->car_id = $car->id;
+            $rental->user_id = auth()->user()->id;
+            $rental->name = $validated['name'];
+            $rental->phone = $validated['phone'];
+            $rental->email = $validated['email'];
+            $rental->address = $validated['address'];
+            $rental->id_card = $idCardPath;
+            $rental->duration = $validated['duration'];
+            $rental->return_date = $validated['return_date'];
+            $rental->payment_method = $validated['payment_method'];
+            $rental->total_payment = $totalPayment;
+            $rental->status = Transaction::VALID_STATUSES[0]; // 'Pending'
+            $rental->save();
 
-        // Upload ID card
-        if ($request->hasFile('id_card')) {
-            $rental->id_card = $request->file('id_card')->store('id_cards');
-        }
+            // Update car status
+            $car->status = Car::STATUS_DISEWA;
+            $car->save();
 
-        // Save rental data
-        $rental->save();
+            return redirect()
+                ->route('rental.payment.form', ['rentalId' => $rental->id])
+                ->with('success', 'Order berhasil dibuat. Silahkan lakukan pembayaran.');
 
-        // Store rental data in session for payment
-        session([
-            'rental_id' => $rental->id,
-            'total_payment' => $rental->total_payment,
-            'duration' => $rental->duration,
-        ]);
+        // } catch (Exception $e) {
+            // Hapus file ID card jika upload sudah dilakukan tapi terjadi error
+            if (isset($idCardPath)) {
+                Storage::disk('public')->delete($idCardPath);
+            }
 
-        // Redirect to payment page
-        return redirect()->route('rental.payment.form', ['rentalId' => $rental->id]);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        // }
     }
 
     /**
-     * Calculate the total paysment based on duration and car rental price.
+     * Calculate the total payment based on duration and car rental price.
      *
      * @param int $duration
      * @param \App\Models\Car $car
      * @return float
      */
-    private function calculateTotalPayment($duration, $car)
+    private function calculateTotalPayment($duration, Car $car)
     {
         return $car->rental_price * $duration;
     }
