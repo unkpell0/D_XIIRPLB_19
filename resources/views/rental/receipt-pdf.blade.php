@@ -64,13 +64,28 @@
                 <td><strong>Metode Pembayaran:</strong></td>
                 <td>{{ $transaction->payment_method === 'bank_transfer' ? 'Transfer Bank' : 'Tunai' }}</td>
             </tr>
+            @if ($transaction->payment_method === 'bank_transfer')
+                <tr>
+                    <td><strong>Nama Bank:</strong></td>
+                    <td>{{ $transaction->bank_name ?? 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Nomor Kartu:</strong></td>
+                    <td>{{ $transaction->card_number ?? 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Nama Pemegang Kartu:</strong></td>
+                    <td>{{ $transaction->card_holder ?? 'N/A' }}</td>
+                </tr>
+            @elseif ($transaction->payment_method === '')
+            @endif
             <tr>
                 <td><strong>Tanggal Rental:</strong></td>
-                <td>{{ \Carbon\Carbon::parse($rental->rental_date)->format('d/m/Y') ?? 'N/A' }}</td>
+                <td>{{ \Carbon\Carbon::parse($rental->rental_date)->format('d/m/Y H:i') ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <td><strong>Tanggal Pengembalian:</strong></td>
-                <td>{{ \Carbon\Carbon::parse($rental->return_date)->format('d/m/Y') ?? 'N/A' }}</td>
+                <td>{{ \Carbon\Carbon::parse($rental->return_date)->format('d/m/Y H:i') ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <td><strong>Total Pembayaran:</strong></td>
@@ -78,6 +93,7 @@
             </tr>
         </table>
     </div>
+
 
     <div class="footer">
         <p>Terima kasih telah menggunakan layanan kami!</p>

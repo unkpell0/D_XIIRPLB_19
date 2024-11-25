@@ -2,20 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Car extends Model
 {
     use HasFactory;
-
     /**
      * Define status constants
      */
-    const STATUS_TERSEDIA = 'tersedia';
-    const STATUS_DISEWA = 'disewa';
-    const STATUS_MAINTENANCE = 'maintenance';
+
 
     /**
      * The attributes that are mass assignable.
@@ -30,9 +28,34 @@ class Car extends Model
         'plat_nomor',
         'tahun_produksi',
         'image',
-        'status',
         'rental_price',
+        'note',
+        'count',
     ];
+
+    public function decreaseCount()
+    {
+        if ($this->count > 0) {
+            $this->count -= 1;
+            if ($this->count === 0) {
+                $this->status = self::STATUS_MAINTENANCE;
+            }
+            $this->save();
+            return true;
+        }
+        return true;
+    }
+
+    public function increaseCount()
+    {
+        $this->count += 1;
+        if ($this->status === self::STATUS_MAINTENANCE) {
+            $this->status = self::STATUS_TERSEDIA;
+        }
+        $this->save();
+        return true;
+    }
+
 
     /**
      * The attributes that should be cast.
@@ -82,9 +105,10 @@ class Car extends Model
      *
      * @return bool
      */
+    // Hapus fungsi terkait `status`
     public function isAvailable(): bool
     {
-        return $this->status === self::STATUS_TERSEDIA;
+        return $this->count > 0;
     }
 
     /**
@@ -148,5 +172,31 @@ class Car extends Model
     public function scopeRented($query)
     {
         return $query->where('status', self::STATUS_DISEWA);
+    }
+
+    public function canBeRented(): bool
+    {
+        return $this->count > 0;
+    }
+
+    /**
+     * Check if car is rented by current user
+     */
+    public function isRentedByUser(): bool
+    {
+        return Rental::where('user_id', Auth::id())
+            ->where('car_id', $this->id)
+            ->where('status', Transaction::VALID_STATUSES[1]) // 'disewa'
+            ->exists();
+    }
+
+    /**
+     * Get user's active rental count
+     */
+    public static function getUserActiveRentals()
+    {
+        return Rental::where('user_id', Auth::id())
+            ->where('status', 'Dirental')
+            ->count();
     }
 }

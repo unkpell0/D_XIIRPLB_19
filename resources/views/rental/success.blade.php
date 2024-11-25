@@ -5,8 +5,17 @@
         <h1>Anda Berhasil Merental Mobil!</h1>
         <p>Mobil dengan nama {{ $rental->car->name }} berhasil dirental selama {{ $rental->duration }} hari.</p>
         <p>Harap kembali pada tanggal <strong>{{ $rental->return_date }}</strong> untuk pengembalian mobil.</p>
-        <a href="{{ route('user') }}" class="btn btn-primary mt-4">Kembali ke Menu Utama</a>
+
+        <div class="alert alert-success">
+            Pembayaran berhasil dikonfirmasi!
+        </div>
+        <div class="flex flex-col mx-auto space-y-2 w-48">
+            <a href="{{ route('rental.receipt', ['rentalId' => $rental->id]) }}" class="btn btn-primary">Cetak Struk</a>
+
+            <a href="{{ route('user') }}" class="btn btn-primary mt-4">Kembali ke Menu Utama</a>
+        </div>
     </div>
+
 
     @push('scripts')
         <script>

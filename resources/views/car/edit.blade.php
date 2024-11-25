@@ -20,20 +20,32 @@
                         <div>
                             <label for="image" class="block text-sm font-medium text-gray-700">Gambar</label>
                             <input type="file" id="image" name="image"
-                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('image') @enderror">
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 @error('image') @enderror">
                             @error('image')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <div>
-                            <label for="nama" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
-                            <input type="text" id="nama" name="nama" value="{{ old('nama', $car->nama) }}"
-                                placeholder="Masukkan Nama Mobil"
-                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('nama') @enderror">
-                            @error('nama')
-                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                            @enderror
+                        <div class="flex flex-row w-full space-x-4">
+                            <div class="w-full">
+                                <label for="nama" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
+                                <input type="text" id="nama" name="nama" value="{{ old('nama', $car->nama) }}"
+                                    placeholder="Masukkan Nama Mobil"
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 placeholder:italic placeholder:pl-2  @error('nama') @enderror">
+                                @error('nama')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="w-full">
+                                <label for="count" class="block text-sm font-medium text-gray-700">Jumlah Mobil</label>
+                                <input type="number" id="count" name="count" value="{{ old('count', $car->count) }}"
+                                    placeholder="Masukkan jumlah mobil"
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('count') placeholder:ml-2 @enderror">
+                                @error('count')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="flex flex-row w-full space-x-4">
@@ -133,7 +145,7 @@
                             </div>
                         </div>
 
-                        <div>
+                        {{-- <div>
                             <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                             <select id="status" name="status"
                                 class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('status') @enderror">
@@ -149,6 +161,16 @@
                                     Disewa</option>
                             </select>
                             @error('status')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div> --}}
+
+                        <div class="w-full">
+                            <label for="note" class="block text-sm font-medium text-gray-700">Catatan Mobil</label>
+                            <input type="text" id="note" name="note" value="{{ old('note', $car->note) }}"
+                                placeholder="Masukkan Catatan untuk mobil"
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('note') placeholder:ml-2 @enderror">
+                            @error('note')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
                         </div>

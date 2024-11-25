@@ -13,6 +13,7 @@ class Rental extends Model
 
     protected $fillable = [
         'car_id',
+        'user_id',
         'name',
         'phone',
         'email',
@@ -20,6 +21,8 @@ class Rental extends Model
         'id_card',
         'duration',
         'return_date',
+        'return_condition', 
+        'return_kilometer',
         'payment_method',
         'total_payment',
         'status',
@@ -41,5 +44,10 @@ class Rental extends Model
     }
 
     protected $primaryKey = 'id';
+
+    public function returnTransaction()
+    {
+        return $this->hasOne(Transaction::class, 'rental_id', 'id');
+    }
 
 }

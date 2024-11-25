@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('image');
             $table->enum('status', ['tersedia', 'disewa', 'maintenance'])->default('tersedia');
             $table->decimal('rental_price', 10, 2)->default(0);
+            $table->string('note');
+            $table->integer('count');
             $table->softDeletes();
             $table->timestamps();
         });

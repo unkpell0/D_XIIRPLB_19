@@ -22,11 +22,12 @@
                             <p class="card-text"><strong>Jenis:</strong> {{ $car->jenis }}</p>
                             <p class="card-text"><strong>Tipe:</strong> {{ $car->tipe }}</p>
                             <p class="card-text"><strong>Plat Nomor:</strong> {{ $car->plat_nomor }}</p>
-                            <p class="card-text"><strong>Status:</strong>
+                            <p class="card-text"><strong>Jumlah:</strong> {{ $car->count }}</p>
+                            {{-- <p class="card-text"><strong>Status:</strong>
                                 <span class="badge bg-{{ $car->status == 'tersedia' ? 'success' : ($car->status == 'maintenance' ? 'warning' : 'danger') }}">
                                     {{ $car->status }}
                                 </span>
-                            </p>
+                            </p> --}}
                             <div class="d-flex justify-content-between">
                                 <a href="{{ route('car.edit', $car->id) }}" class="btn btn-primary btn-sm">Edit</a>
                                 <form action="{{ route('car.destroy', $car->id) }}" method="POST">

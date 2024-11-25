@@ -23,6 +23,8 @@ class CarRequest extends FormRequest
             'tahun_produksi' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
             'status' => 'required|in:' . implode(',', Car::getStatuses()),
             'rental_price' => 'required|numeric|min:0',
+            'count' => 'required|numeric|min:1',
+            'note'=> 'required|string|max:255',
         ];
 
         // Add unique validation for plat_nomor on create
@@ -56,6 +58,9 @@ class CarRequest extends FormRequest
             'rental_price.required' => 'Harga sewa harus diisi',
             'rental_price.numeric' => 'Harga sewa harus berupa angka',
             'rental_price.min' => 'Harga sewa minimal 0',
+            'count.min' => 'Jumlah mobil minimal 0',
+            'count.required' => 'Jumlah mobil harus diisi',
+            'note.required' => 'Catatan harus diisi',
         ];
     }
 }

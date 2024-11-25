@@ -47,6 +47,18 @@
         body {
             background-color: var(--background-color);
             color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* Pastikan tinggi halaman penuh layar */
+            margin: 0;
+        }
+
+        #app {
+            flex: 1;
+            /* Membuat elemen ini mengisi sisa ruang antara header dan footer */
+            display: flex;
+            flex-direction: column;
         }
 
         /* Switch Button Styling */
@@ -131,15 +143,28 @@
                 object-fit: cover;
             }
         }
+
+        footer {
+            flex-shrink: 0;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 1rem;
+        }
+
+        main {
+            flex: 1;
+            /* Konten utama memenuhi ruang yang tersedia */
+        }
     </style>
 </head>
 
-<body data-theme="light">
+<body data-theme="light" class="h-screen">
     <div id="app">
         @if (Request::is('login') || Request::is('register'))
             @include('components.navbar2');
         @else
-            <x-navbar></x-navbar>
+            {{-- <x-navbar></x-navbar> --}}
+            @include('components.navbar');
         @endif
 
         @include('components.dark-mode')
@@ -149,8 +174,8 @@
         </main>
 
         <!-- Footer -->
-        <footer class="custom-footer text-center mt-5 py-4">
-            <p>&copy; 2024 AYORENT. All rights reserved.</p>
+        <footer class="custom-footer align-bottom text-center mt-5 py-4">
+            <p>&copy; 2024 AYORENT. Projek UAS.</p>
         </footer>
     </div>
 

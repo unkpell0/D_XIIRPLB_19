@@ -76,7 +76,12 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
         // Rental Order Routes
         Route::get('/order/{carId}', [RentalController::class, 'order'])->name('order');
         Route::post('/store', [RentalController::class, 'store'])->name('store');
+
         Route::get('/success/{rentalId}', [TransactionController::class, 'rentalSuccess'])->name('success');
+        Route::get('/receipt/{rentalId}', [TransactionController::class, 'printReceipt'])->name('receipt');
+
+        Route::get('/return/{carId}', [TransactionController::class, 'returnForm'])->name('returnForm');
+        Route::post('/return/{carId}', [TransactionController::class, 'processReturn'])->name('processReturn');
 
         // Payment Management Routes
         Route::prefix('payment')->name('payment.')->group(function () {

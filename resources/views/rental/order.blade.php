@@ -135,7 +135,6 @@
 
             </div>
 
-            <!-- Informasi Mobil -->
             <div class="col-md-4">
                 <div class="bg-light p-3 rounded shadow-sm">
                     <h3>Detail Mobil</h3>
@@ -147,9 +146,16 @@
                     <p><strong>Jenis:</strong> {{ $car->tipe }}</p>
                     <p><strong>Nomor Plat:</strong> {{ $car->plat_nomor }}</p>
                     <p><strong>Harga Rental:</strong> Rp{{ number_format($car->rental_price, 0, ',', '.') }}</p>
-                    <p><strong>Status:</strong> {{ $car->status }}</p>
+                    {{-- <p><strong>Status:</strong> {{ $car->status }}</p> --}}
+                </div>
+
+                <!-- Catatan -->
+                <div class="bg-warning text-dark p-3 mt-3 rounded">
+                    <h5>Catatan Penting</h5>
+                    <p>{{ $car ->note }}</p>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -171,7 +177,7 @@
 
                     const currentDate = new Date();
                     currentDate.setDate(currentDate.getDate() +
-                    duration); // Add the rental duration to the current date
+                        duration); // Add the rental duration to the current date
 
                     const year = currentDate.getFullYear();
                     const month = String(currentDate.getMonth() + 1).padStart(2, '0');

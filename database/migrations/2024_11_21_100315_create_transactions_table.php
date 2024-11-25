@@ -15,6 +15,9 @@ class CreateTransactionsTable extends Migration
             $table->string('payment_method');
             $table->decimal('total_payment', 10, 2);
             $table->enum('status', ['tersedia', 'disewa', 'maintenance']); // Define possible status values
+            $table->string('bank_name')->nullable();
+            $table->string('card_number')->nullable();
+            $table->string('card_holder')->nullable();
             $table->timestamps();
         });
     }

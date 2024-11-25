@@ -57,6 +57,8 @@ class CarController extends Controller
             'image' => $image->hashName(),
             'status' => $request->status,
             'rental_price' => $request->rental_price,
+            'note' => $request->note,
+            'count'=> $request->count,
         ]);
 
         return redirect()

@@ -14,22 +14,24 @@ class Transaction extends Model
         'rental_id',
         'payment_method',
         'total_payment',
-        'status'
+        'bank_name',
+        'card_number',
+        'card_holder',
     ];
 
     // Add constant for valid statuses
-    const VALID_STATUSES = ['tersedia', 'disewa', 'maintenance'];
+    // const VALID_STATUSES = ['tersedia', 'disewa', 'maintenance'];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::saving(function ($transaction) {
-            if (!in_array($transaction->status, self::VALID_STATUSES)) {
-                throw new \InvalidArgumentException('Invalid status value');
-            }
-        });
-    }
+    //     static::saving(function ($transaction) {
+    //         if (!in_array($transaction->status, self::VALID_STATUSES)) {
+    //             throw new \InvalidArgumentException('Invalid status value');
+    //         }
+    //     });
+    // }
 
     /**
      * Get the user that owns the transaction.
@@ -46,9 +48,4 @@ class Transaction extends Model
     {
         return $this->belongsTo(Rental::class);
     }
-
-    public function transaction()
-{
-    return $this->hasOne(Transaction::class);
-}
 }
