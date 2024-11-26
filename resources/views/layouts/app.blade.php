@@ -167,7 +167,7 @@
             @include('components.navbar');
         @endif
 
-        @include('components.dark-mode')
+        {{-- @include('components.dark-mode') --}}
 
         <main class="py-2">
             @yield('content')

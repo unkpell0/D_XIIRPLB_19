@@ -76,9 +76,9 @@ class User extends Authenticatable
     }
 
     public function canRentMoreCars(): bool
-{
-    return $this->getActiveRentalsCount() < self::MAX_RENTALS;
-}
+    {
+        return $this->getActiveRentalsCount() < self::MAX_RENTALS;
+    }
 
     /**
      * Get count of currently active rentals for the user
@@ -86,9 +86,9 @@ class User extends Authenticatable
      * @return int
      */
     public function getActiveRentalsCount(): int
-{
-    return $this->rental()->count(); // Tidak lagi memeriksa status
-}
+    {
+        return $this->rental()->count(); // Langsung hitung jumlah rental
+    }
 
     // /**
     //  * Check if user can rent more cars

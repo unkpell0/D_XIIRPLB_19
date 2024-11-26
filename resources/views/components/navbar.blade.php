@@ -1,9 +1,18 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand m-1" href="{{ route('home') }}">
-            @include('components.logo')
-            AYORENT
-        </a>
+        @auth
+            @if (auth()->user()->type == 'user')
+                <a class="navbar-brand m-1" href="{{ route('home') }}">
+                    @include('components.logo')
+                    AYORENT
+                </a>
+            @else
+                <a class="navbar-brand m-1" href="{{ route('admin.dashboard') }}">
+                    @include('components.logo')
+                    AYORENT
+                </a>
+            @endif
+        @endauth
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
@@ -14,10 +23,13 @@
             <ul class="navbar-nav me-auto">
                 @auth
                     @if (auth()->user()->type == 'user')
-                        <li class="nav-item"><x-nav-link href="{{ route('user') }}" :active="request()->is('user')">Home</x-nav-link></li>
-                        <li class="nav-item"><x-nav-link href="{{ route('user') }}" :active="request()->is('user')">History</x-nav-link></li>
+                        <li class="nav-item"><x-nav-link href="{{ route('user') }}" :active="request()->is('user')">Home</x-nav-link>
+                        </li>
+                        <li class="nav-item"><x-nav-link href="{{ route('history') }}"
+                                :active="request()->is('history')">History</x-nav-link></li>
                     @else
-                        <li class="nav-item"><x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->is('admin.dashboard')">Home</x-nav-link></li>
+                        <li class="nav-item"><x-nav-link href="{{ route('admin.dashboard') }}"
+                                :active="request()->is('admin.dashboard')">Home</x-nav-link></li>
                     @endif
                 @endauth
 

@@ -1,15 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-                <div class="card-body">
-                    <h1>Hi, <span class="text-pink-400 text-5xl">{{ Auth::user()->name }}</span></h1>
-                </div>
-            </div>
-        </div>
+    <div class="border-2 w-[29rem] mx-auto border-sky-900 h-fit max-h-dvh py-4">
+        <h2 class="text-5xl font-bold text-center items-center">Hi <span class="text-7xl font-bold text-red-600">{{ Auth::user()->name }}!</span></h2>
     </div>
 </div>
 @endsection

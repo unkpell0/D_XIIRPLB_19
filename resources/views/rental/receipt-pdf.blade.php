@@ -77,11 +77,14 @@
                     <td><strong>Nama Pemegang Kartu:</strong></td>
                     <td>{{ $transaction->card_holder ?? 'N/A' }}</td>
                 </tr>
-            @elseif ($transaction->payment_method === '')
+            @elseif ($transaction->payment_method === 'tunai')
+            <tr>
+                <td><strong>Tunai</strong></td>
+            </tr>
             @endif
             <tr>
                 <td><strong>Tanggal Rental:</strong></td>
-                <td>{{ \Carbon\Carbon::parse($rental->rental_date)->format('d/m/Y H:i') ?? 'N/A' }}</td>
+                <td>{{ \Carbon\Carbon::parse($rental->start_date)->format('d/m/Y H:i') ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <td><strong>Tanggal Pengembalian:</strong></td>

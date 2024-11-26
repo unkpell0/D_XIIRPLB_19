@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class RentalController extends Controller
 {
+    public function __construct(){
+        $this->middleware("auth");
+    }
     /**
      * Show the order form for a car.
      *
@@ -19,14 +22,13 @@ class RentalController extends Controller
      */
     public function order($carId)
     {
-        // try {
-            $car = Car::available()->findOrFail($carId);
-            return view('rental.order', compact('car'));
-        // } catch (Exception $e) {
-        //     return redirect()
-        //         ->route('home')
-        //         ->with('error', 'Mobil tidak tersedia atau sudah disewa.');
-        // }
+        $car = Car::where('id', $carId)->where('count', '>', 0)->first();
+
+        if (!$car) {
+            return redirect()->route('user')->with('error', 'Mobil tidak tersedia atau sudah disewa.');
+        }
+
+        return view('rental.order', compact('car'));
     }
 
     /**
@@ -49,53 +51,41 @@ class RentalController extends Controller
             'payment_method' => 'required|in:cash,bank_transfer',
         ]);
 
-        // try {
-            $car = Car::findOrFail($request->car_id);
-            if (!$car->isAvailable()) {
-                throw new Exception('Mobil sudah tidak tersedia.');
-            }
+        $car = Car::where('id', $request->car_id)->where('count', '>', 0)->first();
 
-            // Calculate total payment
-            $totalPayment = $this->calculateTotalPayment($request->duration, $car);
-
-            // Handle ID card upload
-            $idCardPath = $request->file('id_card')->store('id_cards', 'public');
-
-            // Create new rental
-            $rental = new Rental();
-            $rental->car_id = $car->id;
-            $rental->user_id = auth()->user()->id;
-            $rental->name = $validated['name'];
-            $rental->phone = $validated['phone'];
-            $rental->email = $validated['email'];
-            $rental->address = $validated['address'];
-            $rental->id_card = $idCardPath;
-            $rental->duration = $validated['duration'];
-            $rental->return_date = $validated['return_date'];
-            $rental->payment_method = $validated['payment_method'];
-            $rental->total_payment = $totalPayment;
-            $rental->status = Transaction::VALID_STATUSES[0]; // 'Pending'
-            $rental->save();
-
-            // Update car status
-            $car->status = Car::STATUS_DISEWA;
-            $car->save();
-
+        if (!$car) {
             return redirect()
-                ->route('rental.payment.form', ['rentalId' => $rental->id])
-                ->with('success', 'Order berhasil dibuat. Silahkan lakukan pembayaran.');
+                ->route('home')
+                ->with('error', 'Mobil tidak tersedia atau sudah disewa.');
+        }
 
-        // } catch (Exception $e) {
-            // Hapus file ID card jika upload sudah dilakukan tapi terjadi error
-            // if (isset($idCardPath)) {
-            //     Storage::disk('public')->delete($idCardPath);
-            // }
+        // Hitung total pembayaran
+        $totalPayment = $this->calculateTotalPayment($request->duration, $car);
 
-            // return redirect()
-            //     ->back()
-            //     ->withInput()
-            //     ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        // }
+        // Upload ID card
+        $idCardPath = $request->file('id_card')->store('id_cards', 'public');
+
+        // Buat order rental baru
+        $rental = new Rental();
+        $rental->car_id = $car->id;
+        $rental->user_id = auth()->user()->id;
+        $rental->name = $validated['name'];
+        $rental->phone = $validated['phone'];
+        $rental->email = $validated['email'];
+        $rental->address = $validated['address'];
+        $rental->id_card = $idCardPath;
+        $rental->duration = $validated['duration'];
+        $rental->return_date = $validated['return_date'];
+        $rental->payment_method = $validated['payment_method'];
+        $rental->total_payment = $totalPayment;
+        $rental->save();
+
+        // Update jumlah mobil yang tersedia
+        $car->decreaseCount();
+
+        return redirect()
+            ->route('rental.payment.form', ['rentalId' => $rental->id])
+            ->with('success', 'Order berhasil dibuat. Silahkan lakukan pembayaran.');
     }
 
     /**

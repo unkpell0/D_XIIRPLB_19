@@ -13,11 +13,15 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth");
+    }
     public function showPaymentForm($rentalId)
     {
         // try {
         $rental = Rental::with(['user', 'car'])
-            ->where('status', Transaction::VALID_STATUSES[0]) // 'Pending'
+            // ->where('status', Transaction::VALID_STATUSES[0]) // 'Pending'
             ->findOrFail($rentalId);
 
         return view('rental.payment', compact('rental'));
@@ -40,36 +44,41 @@ class TransactionController extends Controller
             'card_holder' => 'required_if:payment_method,bank_transfer',
         ]);
 
-        $rental = Rental::where('status', Transaction::VALID_STATUSES[0]) // 'Pending'
-            ->findOrFail($rentalId);
+        // $rental = Rental::where('status', Transaction::VALID_STATUSES[0]) // 'Pending'
+        //     ->findOrFail($rentalId);
+
+        $rental = Rental::findOrFail($rentalId);
 
         // Batasi maksimal 3 mobil per user
-        $activeRentals = Rental::where('user_id', Auth::id())
-            ->where('status', Transaction::VALID_STATUSES[0]) // 'Dirental'
-            ->count();
+        // $activeRentals = Rental::where('user_id', Auth::id())
+        //     ->where('status', Transaction::VALID_STATUSES[0]) // 'Dirental'
+        //     ->count();
 
-        if ($activeRentals >= 2) {
-            return redirect()
-                ->route('user')
-                ->with('error', 'Anda sudah mencapai batas maksimum menyewa 3 mobil. Harap kembalikan mobil terlebih dahulu.');
-        }
+        // if ($activeRentals >= 2) {
+        //     return redirect()
+        //         ->route('user')
+        //         ->with('error', 'Anda sudah mencapai batas maksimum menyewa 3 mobil. Harap kembalikan mobil terlebih dahulu.');
+        // }
 
         $transaction = new Transaction();
         $transaction->user_id = Auth::id();
         $transaction->rental_id = $rental->id;
         $transaction->payment_method = $request->payment_method;
         $transaction->total_payment = $request->total_payment;
-        $transaction->status = Transaction::VALID_STATUSES[0]; // 'Pending'
+        $transaction->bank_name = $request->bank_name ?? null;
+        $transaction->card_number = $request->card_number ?? null;
+        $transaction->card_holder = $request->card_holder ?? null;
+
+        // $transaction->status = Transaction::VALID_STATUSES[0]; // 'Pending'
 
         if (!$transaction->save()) {
             throw new Exception('Gagal menyimpan transaksi');
         }
 
         $car = Car::findOrFail($rental->car_id);
-        // Kurangi jumlah mobil yang tersedia
         $car->decreaseCount();
 
-        session()->flash('payment_confirmed', true);
+        // session()->flash('payment_confirmed', true);
 
         return redirect()
             ->route('rental.success', ['rentalId' => $rental->id])
@@ -120,9 +129,9 @@ class TransactionController extends Controller
         $car = Car::findOrFail($carId);
 
         // Pastikan mobil dalam status "disewa"
-        if ($car->status !== Car::STATUS_DISEWA) {
-            return redirect()->route('user')->with('error', 'Mobil tidak sedang disewa.');
-        }
+        // if ($car->status !== Car::STATUS_DISEWA) {
+        //     return redirect()->route('user')->with('error', 'Mobil tidak sedang disewa.');
+        // }
 
         return view('rental.return', compact('car'));
     }
@@ -135,12 +144,10 @@ class TransactionController extends Controller
         ]);
 
         $car = Car::findOrFail($carId);
-        $rental = Rental::where('car_id', $car->id)
-            ->where('status', Transaction::VALID_STATUSES[1]) // 'Dirental'
-            ->firstOrFail();
+        $rental = Rental::where('car_id', $car->id)->firstOrFail();
 
         // Perbarui status rental menjadi 'maintenance'
-        $rental->status = Transaction::VALID_STATUSES[0]; // 'maintenance'
+        // $rental->status = Transaction::VALID_STATUSES[0]; // 'maintenance'
         $rental->return_condition = $request->condition;
         $rental->return_kilometer = $request->kilometer;
         $rental->return_date = now();

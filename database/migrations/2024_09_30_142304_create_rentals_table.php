@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->string('id_card');
             $table->integer('duration');
             $table->dateTime('return_date');
+            $table->dateTime('start_date');
             $table->string('payment_method');
             $table->decimal('total_payment', 10, 2);
             $table->string('status')->default('tersedia');

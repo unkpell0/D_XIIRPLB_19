@@ -20,13 +20,30 @@ class Rental extends Model
         'address',
         'id_card',
         'duration',
+        'start_date',
         'return_date',
-        'return_condition', 
+        'return_condition',
         'return_kilometer',
         'payment_method',
         'total_payment',
-        'status',
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'start_date' => 'datetime',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($rental) {
+            if (is_null($rental->start_date)) {
+                $rental->start_date = now(); // Tetapkan nilai default
+            }
+        });
+    }
+
 
     public function user()
     {

@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'AYORENT | EDIT DATA')
+@section('title', 'ADMIN | EDIT DATA')
 @section('content')
     <div class="container mx-auto mb-10">
         <div class="max-w-4xl mx-auto">

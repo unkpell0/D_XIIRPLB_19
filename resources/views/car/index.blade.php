@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'AYORENT | TAMPILAN DATA')
+@section('title', 'ADMIN | TAMPILAN DATA')
 
 @section('content')
     <div class="container mt-5">
         <div class="row">
-            <h1 class="text-center mb-4">Daftar Mobil</h1>
+            <h1 class="text-center mb-4 text-gray-800">Daftar Mobil</h1>
 
             <!-- Link untuk Tambah Mobil -->
             <div class="d-flex justify-content-end mb-4">
@@ -14,21 +14,17 @@
 
             @foreach ($cars as $car)
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
-                        <img src="{{ asset('storage/cars/' . $car->image) }}" class="card-img-center bg-contain rounded-md" alt="{{ $car->nama }}">
+                    <div class="card shadow-lg rounded-md h-100">
+                        <img src="{{ asset('storage/cars/' . $car->image) }}" class="card-img-top img-fluid rounded-t-md" alt="{{ $car->nama }}">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $car->nama }}</h5>
+                            <h5 class="card-title text-xl font-semibold text-gray-900">{{ $car->nama }}</h5>
                             <p class="card-text"><strong>Merek:</strong> {{ $car->merek }}</p>
                             <p class="card-text"><strong>Jenis:</strong> {{ $car->jenis }}</p>
                             <p class="card-text"><strong>Tipe:</strong> {{ $car->tipe }}</p>
                             <p class="card-text"><strong>Plat Nomor:</strong> {{ $car->plat_nomor }}</p>
                             <p class="card-text"><strong>Jumlah:</strong> {{ $car->count }}</p>
-                            {{-- <p class="card-text"><strong>Status:</strong>
-                                <span class="badge bg-{{ $car->status == 'tersedia' ? 'success' : ($car->status == 'maintenance' ? 'warning' : 'danger') }}">
-                                    {{ $car->status }}
-                                </span>
-                            </p> --}}
-                            <div class="d-flex justify-content-between">
+
+                            <div class="d-flex justify-content-between mt-3">
                                 <a href="{{ route('car.edit', $car->id) }}" class="btn btn-primary btn-sm">Edit</a>
                                 <form action="{{ route('car.destroy', $car->id) }}" method="POST">
                                     @csrf
@@ -40,7 +36,6 @@
                     </div>
                 </div>
             @endforeach
-
         </div>
 
         <!-- Pagination -->

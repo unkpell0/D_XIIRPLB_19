@@ -21,7 +21,7 @@ class CarRequest extends FormRequest
             'tipe' => 'required|string|max:255',
             'plat_nomor' => 'required|string|max:10',
             'tahun_produksi' => 'required|digits:4|integer|min:2000|max:' . date('Y'),
-            'status' => 'required|in:' . implode(',', Car::getStatuses()),
+            // 'status' => 'required|in:' . implode(',', Car::getStatuses()),
             'rental_price' => 'required|numeric|min:0',
             'count' => 'required|numeric|min:1',
             'note'=> 'required|string|max:255',

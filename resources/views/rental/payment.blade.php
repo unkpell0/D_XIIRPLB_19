@@ -49,10 +49,10 @@
                                 <div class="mb-3">
                                     <label class="form-label">Pilih Bank</label>
                                     <select name="bank_name" class="form-control">
-                                        <option value="bca">BCA</option>
-                                        <option value="mandiri">Mandiri</option>
-                                        <option value="bni">BNI</option>
-                                        <option value="bri">BRI</option>
+                                        <option value="bca" {{ old('bank_name') == 'bca' ? 'selected' : '' }}>BCA</option>
+                                        <option value="mandiri" {{ old('bank_name') == 'mandiri' ? 'selected' : '' }}>Mandiri</option>
+                                        <option value="bni" {{ old('bank_name') == 'bni' ? 'selected' : '' }}>BNI</option>
+                                        <option value="bri" {{ old('bank_name') == 'bri' ? 'selected' : '' }}>BRI</option>
                                     </select>
                                 </div>
 
@@ -104,7 +104,7 @@
                             </div>
                         </form>
 
-                        
+
 
                     </div>
                 </div>

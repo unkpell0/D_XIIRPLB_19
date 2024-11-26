@@ -70,6 +70,7 @@ Route::resource('car', CarController::class);
 Route::middleware(['auth', 'user-access:user'])->group(function () {
     // User Dashboard
     Route::get('/user', [UserController::class, 'index'])->name('user');
+    Route::get('/user/history', [UserController::class, 'history'])->name('history');
 
     // Rental Management
     Route::prefix('rental')->name('rental.')->group(function () {
@@ -98,6 +99,7 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
 // Route::domain('admin.localhost')->group(function () {
 Route::middleware(['auth', 'auth.admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/history', [AdminController::class,'index'])->name('admin.history');
 });
 // });
 

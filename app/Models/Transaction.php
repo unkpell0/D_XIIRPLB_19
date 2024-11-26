@@ -19,6 +19,7 @@ class Transaction extends Model
         'card_holder',
     ];
 
+
     // Add constant for valid statuses
     // const VALID_STATUSES = ['tersedia', 'disewa', 'maintenance'];
 

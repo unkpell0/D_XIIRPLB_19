@@ -35,10 +35,14 @@ class UserController extends Controller
                 'car_id' => $car->id,
                 'status' => 'Dirental',
             ]);
-    
+
             return redirect()->back()->with('Success', 'Mobil berhasil dirental');
         } else{
             return redirect()->back()->with('error', 'Mobil tidak tersedia.');
         }
+    }
+
+    public function history(){
+        return view('rental.history');
     }
 }

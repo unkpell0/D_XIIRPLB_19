@@ -32,8 +32,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        $statuses = Car::getStatuses();
-        return view('car.create', compact('statuses'));
+        return view('car.create');
     }
 
     /**
@@ -55,7 +54,6 @@ class CarController extends Controller
             'plat_nomor' => $request->plat_nomor,
             'tahun_produksi' => $request->tahun_produksi,
             'image' => $image->hashName(),
-            'status' => $request->status,
             'rental_price' => $request->rental_price,
             'note' => $request->note,
             'count'=> $request->count,
@@ -74,8 +72,7 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        $statuses = Car::getStatuses();
-        return view('car.edit', compact('car', 'statuses'));
+        return view('car.edit', compact('car'));
     }
 
     /**
