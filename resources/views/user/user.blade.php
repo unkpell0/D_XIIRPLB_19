@@ -4,8 +4,11 @@
 
 @section('content')
     <div class="container mt-5">
+
+        <h3 class="text-center text-5xl text-white font-inter font-bold">Selamat datang, <span class="text-pink-500">{{ Auth::user()->name }}!</span></h3>
+
         <!-- Status Rental Section -->
-        <div class="mb-4">
+        <div class="mb-4 text-color-4 font-bold text-lg">
             @php
                 $activeRentalsCount = Auth::user()->getActiveRentalsCount();
                 $maxRentals = Auth::user()::MAX_RENTALS;

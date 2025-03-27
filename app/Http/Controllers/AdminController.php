@@ -11,7 +11,7 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
-    public function index()
+    public function history()
     {
         // Ambil semua user dengan hubungan rental untuk transaksi
         $users = User::with(['rental.car'])->latest()->get();

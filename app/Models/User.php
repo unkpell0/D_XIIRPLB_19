@@ -23,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'type',
+        'role',
+        // 'type',
     ];
 
     /**
@@ -47,12 +48,12 @@ class User extends Authenticatable
 
     protected $primaryKey = 'id';
 
-    protected function type(): Attribute
-    {
-        return new Attribute(
-            get: fn($value) => ["user", "admin"][$value],
-        );
-    }
+    // protected function type(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn($value) => ["user", "admin"][$value],
+    //     );
+    // }
 
     public function rental()
     {
@@ -64,6 +65,9 @@ class User extends Authenticatable
         return $this->type === 'admin';
     }
 
+    public function isOwner(){
+        return $this->type === 'owner';
+    }
     public function isUser()
     {
         return $this->type === 'user';

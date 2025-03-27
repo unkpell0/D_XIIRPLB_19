@@ -4,37 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Admin Dashboard | AYORENT')</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Custom Styles -->
-    @yield('styles')
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @yield('scripts')
 </head>
 
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div id="app">
-        <!-- Navbar -->
-        <nav class="bg-green-600 text-white">
-            <div class="max-w-screen px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex-shrink-0">
-                        <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold">Admin Dashboard</a>
-                    </div>
-                    <div>
-                        <a href="{{ route('logout') }}"
-                            class="text-sm font-medium hover:bg-green-500 px-4 py-2 rounded">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <x-navigation></x-navigation>
 
         <div class="flex h-screen">
             <!-- Sidebar -->
@@ -79,7 +64,7 @@
     </div>
 
     <!-- Scripts -->
-    @yield('scripts')
+    @livewireScripts
 </body>
 
 </html>
