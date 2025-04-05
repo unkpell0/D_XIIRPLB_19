@@ -7,11 +7,11 @@
         <div class="row">
             <!-- Informasi Mobil -->
             <div class="col-md-8">
-                <div class="bg-light p-3 rounded shadow-sm">
+                <div class="bg-light p-3 rounded-sm shadow-xs">
                     <h3>Detail Mobil</h3>
                     <div class="mb-3">
                         <img src="{{ Storage::url('public/cars/') . $rental->car->image }}" alt="Gambar Mobil"
-                            class="img-fluid rounded">
+                            class="img-fluid rounded-sm">
                     </div>
                     <p><strong>Nama:</strong> {{ $rental->car->nama }}</p>
                     <p><strong>Jenis:</strong> {{ $rental->car->tipe }}</p>

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-xs">
     <div class="container-fluid">
         <a class="navbar-brand m-1" href="{{ route('home') }}">
             @include('components.logo')

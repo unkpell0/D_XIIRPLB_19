@@ -34,7 +34,7 @@
                 <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">Welcome to Ayorent</h1>
                 <p class="text-lg text-gray-500 dark:text-gray-400 mb-8">Perjalanan Mudah Tanpa Hambatan</p>
                 <div class="flex space-x-4">
-                    <a href="{{ url('login') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    <a href="{{ url('login') }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         Get Started
                     </a>
                 </div>

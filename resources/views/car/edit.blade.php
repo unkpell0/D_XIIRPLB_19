@@ -14,13 +14,13 @@
 
                         <div class="text-center mb-4">
                             <img src="{{ asset('storage/cars/' . $car->image) }}" alt="Car Image"
-                                class="inline-block h-32 w-auto object-cover rounded-lg shadow-sm">
+                                class="inline-block h-32 w-auto object-cover rounded-lg shadow-xs">
                         </div>
 
                         <div>
                             <label for="image" class="block text-sm font-medium text-gray-700">Gambar</label>
                             <input type="file" id="image" name="image"
-                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 @error('image') @enderror">
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 @error('image') @enderror">
                             @error('image')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
@@ -31,7 +31,7 @@
                                 <label for="nama" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
                                 <input type="text" id="nama" name="nama" value="{{ old('nama', $car->nama) }}"
                                     placeholder="Masukkan Nama Mobil"
-                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 placeholder:italic placeholder:pl-2  @error('nama') @enderror">
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 placeholder:italic placeholder:pl-2  @error('nama') @enderror">
                                 @error('nama')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
@@ -41,7 +41,7 @@
                                 <label for="count" class="block text-sm font-medium text-gray-700">Jumlah Mobil</label>
                                 <input type="number" id="count" name="count" value="{{ old('count', $car->count) }}"
                                     placeholder="Masukkan jumlah mobil"
-                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('count') placeholder:ml-2 @enderror">
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('count') placeholder:ml-2 @enderror">
                                 @error('count')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
@@ -52,7 +52,7 @@
                             <div class="w-full">
                                 <label for="jenis" class="block text-sm font-medium text-gray-700">Jenis Mobil</label>
                                 <select id="jenis" name="jenis"
-                                    class="mt-2 h-9 block w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('jenis') @enderror">
+                                    class="mt-2 h-9 block w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('jenis') @enderror">
                                     <option value="" {{ old('jenis', $car->jenis) == '' ? 'selected' : '' }} disabled>
                                         Pilih Jenis Mobil</option>
                                     <option value="LCGC" {{ old('jenis', $car->jenis) == 'LCGC' ? 'selected' : '' }}>LCGC
@@ -72,7 +72,7 @@
                             <div class="w-full">
                                 <label for="merek" class="block text-sm font-medium text-gray-700">Merek Mobil</label>
                                 <select id="merek" name="merek"
-                                    class="mt-2 h-9 block w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('merek') @enderror">
+                                    class="mt-2 h-9 block w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('merek') @enderror">
                                     <option value="" {{ old('merek', $car->merek) == '' ? 'selected' : '' }}
                                         disabled>Pilih Merek Mobil</option>
                                     <option value="Toyota" {{ old('merek', $car->merek) == 'Toyota' ? 'selected' : '' }}>
@@ -100,7 +100,7 @@
                                 <label for="tipe" class="block text-sm font-medium text-gray-700">Tipe Mobil</label>
                                 <input type="text" id="tipe" name="tipe" value="{{ old('tipe', $car->tipe) }}"
                                     placeholder="Masukkan Tipe Mobil"
-                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('tipe') @enderror">
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('tipe') @enderror">
                                 @error('tipe')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
@@ -112,7 +112,7 @@
                                 <input type="text" id="plat_nomor" name="plat_nomor"
                                     value="{{ old('plat_nomor', $car->plat_nomor) }}"
                                     placeholder="Masukkan Plat Nomor Mobil"
-                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('plat_nomor') @enderror">
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('plat_nomor') @enderror">
                                 @error('plat_nomor')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
@@ -126,7 +126,7 @@
                                 <input type="text" id="tahun_produksi" name="tahun_produksi"
                                     value="{{ old('tahun_produksi', $car->tahun_produksi) }}"
                                     placeholder="Masukkan Tahun Produksi"
-                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('tahun_produksi') @enderror">
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('tahun_produksi') @enderror">
                                 @error('tahun_produksi')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
@@ -138,7 +138,7 @@
                                 <input type="number" id="rental_price" name="rental_price"
                                     value="{{ old('rental_price', $car->rental_price) }}"
                                     placeholder="Masukkan Harga Sewa per Hari"
-                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('rental_price') @enderror">
+                                    class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('rental_price') @enderror">
                                 @error('rental_price')
                                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
@@ -148,7 +148,7 @@
                         {{-- <div>
                             <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                             <select id="status" name="status"
-                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('status') @enderror">
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('status') @enderror">
                                 <option value="" {{ old('status', $car->status) == '' ? 'selected' : '' }} disabled>
                                     Pilih Status</option>
                                 <option value="tersedia"
@@ -169,7 +169,7 @@
                             <label for="note" class="block text-sm font-medium text-gray-700">Catatan Mobil</label>
                             <input type="text" id="note" name="note" value="{{ old('note', $car->note) }}"
                                 placeholder="Masukkan Catatan untuk mobil"
-                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('note') placeholder:ml-2 @enderror">
+                                class="mt-2 block h-9 w-full text-sm text-gray-800 border border-gray-300 rounded-lg shadow-xs focus:ring-blue-500 focus:border-blue-500 @error('note') placeholder:ml-2 @enderror">
                             @error('note')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
@@ -177,9 +177,9 @@
 
                         <div class="flex justify-between">
                             <button type="submit"
-                                class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600">Update</button>
+                                class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-blue-600">Update</button>
                             <button type="reset"
-                                class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-yellow-600">Reset</button>
+                                class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-yellow-600">Reset</button>
                         </div>
                     </form>
                 </div>

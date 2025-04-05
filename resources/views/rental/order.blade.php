@@ -136,11 +136,11 @@
             </div>
 
             <div class="col-md-4">
-                <div class="bg-light p-3 rounded shadow-sm">
+                <div class="bg-light p-3 rounded-sm shadow-xs">
                     <h3>Detail Mobil</h3>
                     <div class="mb-3">
                         <img src="{{ Storage::url('public/cars/') . $car->image }}" alt="Gambar Mobil"
-                            class="img-fluid rounded">
+                            class="img-fluid rounded-sm">
                     </div>
                     <p><strong>Nama:</strong> {{ $car->nama }}</p>
                     <p><strong>Jenis:</strong> {{ $car->tipe }}</p>
@@ -150,7 +150,7 @@
                 </div>
 
                 <!-- Catatan -->
-                <div class="bg-warning text-dark p-3 mt-3 rounded">
+                <div class="bg-warning text-dark p-3 mt-3 rounded-sm">
                     <h5>Catatan Penting</h5>
                     <p>{{ $car ->note }}</p>
                 </div>
